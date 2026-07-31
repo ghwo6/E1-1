@@ -463,3 +463,16 @@ ghwo61351@c6r2s2 E1-1 % docker volume inspect my-vol
 ghwo61351@c6r2s2 E1-1 % 
 ‘’’
 
+
+git-ssh 설정함
+'''sh
+ghwo61351@c6r2s2 E1-1 % git push origin main --force
+The authenticity of host 'github.com (20.200.245.247)' can't be established.
+ED25519 key fingerprint is SHA256:+xxxxxx/zxxxxxx.
+This key is not known by any other names.
+Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+Warning: Permanently added 'github.com' (ED25519) to the list of known hosts.
+Total 0 (delta 0), reused 0 (delta 0), pack-reused 0 (from 0)
+To github.com:ghwo6/E1-1.git
+ + eda1300...a4xxb8 main -> main (forced update)
+ '''
