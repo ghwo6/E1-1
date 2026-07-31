@@ -1,5 +1,5 @@
 터미널 조작 로그
-‘’’
+‘’’sh
 Last login: Tue Jul 28 11:44:35 on ttys000
 ghwo61351@c4r1s2 ~ % mkdir ~/ghwo6
 ghwo61351@c4r1s2 ~ % cd ./ghwo6 
@@ -56,7 +56,7 @@ ghwo61351@c4r1s2 E01-01 %
 ‘’’
 
 도커
-‘’’
+‘’’sh
 ghwo61351@c4r1s1 E1-1 % docker --version
 Docker version 29.4.0, build 9d7ad9f
 ghwo61351@c4r1s1 E1-1 % docker info
@@ -301,5 +301,165 @@ d7fc18efe4af   my-custom-server   0.00%     6.16MiB / 15.67GiB   0.04%     1.13k
 ghwo61351@c4r1s1 docker % curl localhost:8080
 <h1>Hello Codyssey! Built by Hojae</h1>
 ghwo61351@c4r1s1 docker % 
+‘’’
+
+
+
+ssh key
+‘’’sh
+ghwo61351@c5r1s2 ~ % ls /Volumes 
+Macintosh HD
+ghwo61351@c5r1s2 ~ % Disk Utility
+zsh: command not found: Disk
+ghwo61351@c5r1s2 ~ % ls /Volumes 
+ho_usb		Macintosh HD
+ghwo61351@c5r1s2 ~ % mkdir /Volumes/ho_usb/git-ssh
+mkdir: /Volumes/ho_usb/git-ssh: File exists
+ghwo61351@c5r1s2 ~ % ssh-keygen -t ed25519 -C "ghwo6@naver.com" -f /Volumes/ho_usb/git-ssh/id_ed25519
+Generating public/private ed25519 key pair.
+Enter passphrase for "/Volumes/ho_usb/git-ssh/id_ed25519" (empty for no passphrase): 
+Enter same passphrase again: 
+Your identification has been saved in /Volumes/ho_usb/git-ssh/id_ed25519
+Your public key has been saved in /Volumes/ho_usb/git-ssh/id_ed25519.pub
+The key fingerprint is:
+SHA256:
+The key's randomart image is:
++--[ED25519 256]--+
+|                 |
+|       .       . |
+|      . o .   . .|
+|     . + = . .  o|
+|    o o S = .  .o|
+| . o . + *     ..|
+|  o =o+.% =     E|
+|   o.+=X+%       |
+|    .oOB+oo      |
++----[SHA256]-----+
+ghwo61351@c5r1s2 ~ % cat /Volumes/ho_usb/git-ssh/id_ed25519.pub | pbcopy
+ghwo61351@c5r1s2 ~ % 
+‘’’
+
+‘’’sh
+ghwo61351@c6r2s2 practice_dir % mkdir folder
+ghwo61351@c6r2s2 practice_dir % touch file.txt
+ghwo61351@c6r2s2 practice_dir % ls
+file.txt        folder          rename.txt      test.txt
+ghwo61351@c6r2s2 practice_dir % ls -al
+total 0
+drwxr-xr-x  6 ghwo61351  ghwo61351  192 Jul 31 16:34 .
+drwxr-xr-x  3 ghwo61351  ghwo61351   96 Jul 31 16:29 ..
+-rw-r--r--  1 ghwo61351  ghwo61351    0 Jul 31 16:34 file.txt
+drwxr-xr-x  2 ghwo61351  ghwo61351   64 Jul 31 16:34 folder
+-rw-r--r--  1 ghwo61351  ghwo61351    0 Jul 31 16:12 rename.txt
+-rwxr-xr-x  1 ghwo61351  ghwo61351    0 Jul 31 16:12 test.txt
+ghwo61351@c6r2s2 practice_dir % cat file.txt 
+ghwo61351@c6r2s2 practice_dir % "file" >> ./file.txt 
+Usage: file [-bcCdEhikLlNnprsSvzZ0] [--extension] [--mime-encoding]
+            [--mime-type] [-e <testname>] [-F <separator>]  [-f <namefile>]
+            [-m <magicfiles>] [-M magicfiles] [-P <parameter=value>] [--exclude-quiet]
+            <file> ...
+       file -C [-m <magicfiles>]
+       file [--help]
+Try `file --help' for more information.
+ghwo61351@c6r2s2 practice_dir % 1234 >> ./file.txt 
+zsh: command not found: 1234
+ghwo61351@c6r2s2 practice_dir % echo "file" >> file.txt 
+ghwo61351@c6r2s2 practice_dir % cat file.txt 
+file
+ghwo61351@c6r2s2 practice_dir % cd ./folder 
+ghwo61351@c6r2s2 folder % cd ..
+ghwo61351@c6r2s2 practice_dir % ls -al
+total 8
+drwxr-xr-x  6 ghwo61351  ghwo61351  192 Jul 31 16:34 .
+drwxr-xr-x  3 ghwo61351  ghwo61351   96 Jul 31 16:29 ..
+-rw-r--r--  1 ghwo61351  ghwo61351    5 Jul 31 16:37 file.txt
+drwxr-xr-x  2 ghwo61351  ghwo61351   64 Jul 31 16:34 folder
+-rw-r--r--  1 ghwo61351  ghwo61351    0 Jul 31 16:12 rename.txt
+-rwxr-xr-x  1 ghwo61351  ghwo61351    0 Jul 31 16:12 test.txt
+ghwo61351@c6r2s2 practice_dir % chmod 000 ./folder ./file.txt  
+ghwo61351@c6r2s2 practice_dir % cd ./folder 
+cd: permission denied: ./folder
+ghwo61351@c6r2s2 practice_dir % cat file.txt 
+cat: file.txt: Permission denied
+ghwo61351@c6r2s2 practice_dir % chmod 777 ./folder ./file.txt 
+ghwo61351@c6r2s2 practice_dir % cd ./folder                   
+ghwo61351@c6r2s2 folder % cd ..
+ghwo61351@c6r2s2 practice_dir % cat file.txt                  
+file
+ghwo61351@c6r2s2 practice_dir % 
+
+
+
+
+‘’’
+
+
+볼륨 영속성 확인
+
+‘’’sh
+ghwo61351@c6r2s2 E1-1 % docker volume --help
+Usage:  docker volume COMMAND
+
+Manage volumes
+
+Commands:
+  create      Create a volume
+  inspect     Display detailed information on one or more volumes
+  ls          List volumes
+  prune       Remove unused local volumes
+  rm          Remove one or more volumes
+
+Run 'docker volume COMMAND --help' for more information on a command.
+ghwo61351@c6r2s2 E1-1 % docker volume create my-vol
+my-vol
+ghwo61351@c6r2s2 E1-1 % docker volume ls
+DRIVER    VOLUME NAME
+local     my-vol
+ghwo61351@c6r2s2 E1-1 % docker volume inspect my-vol
+[
+    {
+        "CreatedAt": "2026-07-31T17:28:26+09:00",
+        "Driver": "local",
+        "Labels": null,
+        "Mountpoint": "/var/lib/docker/volumes/my-vol/_data",
+        "Name": "my-vol",
+        "Options": null,
+        "Scope": "local"
+    }
+]
+ghwo61351@c6r2s2 E1-1 % docker run -it --name vol-test-1 -v my-vol:/data ubuntu bash
+root@72d5f3701a89:/# echo "Data Persistence Test - Built by Hojae" > /data/test.txt
+root@72d5f3701a89:/# ls  
+bin  boot  data  dev  etc  home  lib  lib64  media  mnt  opt  proc  root  run  sbin  srv  sys  tmp  usr  var
+root@72d5f3701a89:/# ls /data
+test.txt
+root@72d5f3701a89:/# cat /data/test.txt 
+Data Persistence Test - Built by Hojae
+root@72d5f3701a89:/# exit
+exit
+ghwo61351@c6r2s2 E1-1 % docker rm -f vol-test-1
+vol-test-1
+ghwo61351@c6r2s2 E1-1 % docker run -it --name vol-test-2 -v my-vol:/data ubuntu bash
+root@b1584b9b5156:/# ls /data 
+test.txt
+root@b1584b9b5156:/# cat /data/test.txt 
+Data Persistence Test - Built by Hojae
+root@b1584b9b5156:/# exit
+exit
+ghwo61351@c6r2s2 E1-1 % docker rm -f vol-test-2
+vol-test-2
+ghwo61351@c6r2s2 E1-1 % docker volume inspect my-vol
+[
+    {
+        "CreatedAt": "2026-07-31T17:28:26+09:00",
+        "Driver": "local",
+        "Labels": null,
+        "Mountpoint": "/var/lib/docker/volumes/my-vol/_data",
+        "Name": "my-vol",
+        "Options": null,
+        "Scope": "local"
+    }
+]
+ghwo61351@c6r2s2 E1-1 % 
 ‘’’
 
