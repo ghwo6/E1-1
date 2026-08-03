@@ -66,6 +66,8 @@ ghwo61351@c4r1s2 E01-01 % ls -l practice_dir/test.txt
 ghwo61351@c4r1s2 E01-01 % 
 ~~~
 
+
+### 파일 권한 변경 실습
 ~~~sh
 ghwo61351@c4r1s2 E01-01 % mkdir practice_dir
 ghwo61351@c6r2s2 practice_dir % mkdir folder
@@ -121,7 +123,8 @@ ghwo61351@c6r2s2 practice_dir %
 
 
 ## Docker 운영/검증 로그
-~~~xsh
+### Docker 기본 명령어
+~~~sh
 ghwo61351@c4r1s1 E1-1 % docker --version
 Docker version 29.4.0, build 9d7ad9f
 ghwo61351@c4r1s1 E1-1 % docker info
@@ -239,6 +242,11 @@ Share images, automate workflows, and more with a free Docker ID:
  https://hub.docker.com/
 For more examples and ideas, visit:
  https://docs.docker.com/get-started/
+~~~
+
+## ubuntu 컨테이너 내부 진입 실습
+
+~~~sh
 ghwo61351@c4r1s1 E1-1 % docker run -it ubuntu bash
 Unable to find image 'ubuntu:latest' locally
 latest: Pulling from library/ubuntu
@@ -279,6 +287,11 @@ root@474b1b2da4c2:/# echo $SHELL
 /bin/bash
 root@474b1b2da4c2:/# exit
 exit
+
+~~~
+
+## 간단한 웹서버 컨테이너 띄우기 + Dockerfile 커스텀 이미지 빌드
+~~~~sh
 ghwo61351@c4r1s1 E1-1 % 
 ghwo61351@c4r1s1 E1-1 % mkdir app   
 ghwo61351@c4r1s1 E1-1 % echo "<h1>Hello Codyssey! Built by Hojae</h1>" > app/index.html
@@ -288,6 +301,14 @@ ghwo61351@c4r1s1 E1-1 % ls docker
 app
 ghwo61351@c4r1s1 E1-1 % cd docker 
 ghwo61351@c4r1s1 docker % nano Dockerfile
+~~~~
+~~~DOCKERFILE
+FROM nginx:alpine
+COPY app/index.html /usr/share/nginx/html/index.html
+EXPOSE 80
+~~~
+
+~~~~sh
 ghwo61351@c4r1s1 docker % docker build -t my-web:1.0 .
 [+] Building 8.0s (7/7) FINISHED                         docker:orbstack
  => [internal] load build definition from Dockerfile                0.2s
@@ -365,7 +386,7 @@ d7fc18efe4af   my-custom-server   0.00%     6.16MiB / 15.67GiB   0.04%     1.13k
 ghwo61351@c4r1s1 docker % curl localhost:8080
 <h1>Hello Codyssey! Built by Hojae</h1>
 ghwo61351@c4r1s1 docker % 
-~~~
+~~~~
 
 ![도커 웹 띄움](./docker_port_connect_on_localhost.png)
 
@@ -441,6 +462,33 @@ ghwo61351@c6r2s2 E1-1 %
 ![볼륨 영속성 확인 사진1](./Docker_Volume_Persistence_1.png)
 ![볼륨 영속성 확인 사진2](./Docker_Volume_Persistence_2.png)
 
+## 포트가 사용중이라고 나올때 대처법
+```sh
+ghwo61351@c6r2s8 docker % docker run -d -p 8080:80 --name web-server-1 my-web:1.0 
+e88478cbbe21480642f8b63bf0f1da10e24b7268f5fb62e0acf6a81533513e2a
+ghwo61351@c6r2s8 docker % docker run -d -p 8081:80 --name web-server-2 my-web:1.0
+dc17f5454ae0957e4b110795dbb1418d09e624bd6d9f7642d3424d2ade0e321b
+ghwo61351@c6r2s8 docker % docker run -d -p 8081:80 --name web-server-3 my-web:1.0
+48a1211ddeebea7ec910e4462a3a00aa46fd0a2c5c394437971323b3452b3c84
+docker: Error response from daemon: failed to set up container networking: driver failed programming external connectivity on endpoint web-server-3 (cbb629dcfe11cd810f7ad86c20faa535bfc09939e8dd254a725a0d59eff65cb9): Bind for 0.0.0.0:8081 failed: port is already allocated
+
+Run 'docker run --help' for more information
+ghwo61351@c6r2s8 docker % docker ps 
+CONTAINER ID   IMAGE        COMMAND                  CREATED          STATUS          PORTS                                     NAMES
+dc17f5454ae0   my-web:1.0   "/docker-entrypoint.…"   22 seconds ago   Up 20 seconds   0.0.0.0:8081->80/tcp, [::]:8081->80/tcp   web-server-2
+e88478cbbe21   my-web:1.0   "/docker-entrypoint.…"   44 seconds ago   Up 43 seconds   0.0.0.0:8080->80/tcp, [::]:8080->80/tcp   web-server-1
+ghwo61351@c6r2s8 docker % $ docker stop web-server-2
+ghwo61351@c6r2s8 docker % docker rm web-server-2
+web-server-2
+ghwo61351@c6r2s8 docker % docker rm web-server-3
+web-server-3
+ghwo61351@c6r2s8 docker % docker run -d -p 8081:80 --name my-web-server my-web:1.0
+c2d81cf3e13b827db0d0f8956488fe616fd3de61101992a87d5cf575db57c916
+ghwo61351@c6r2s8 docker % 
+
+
+```
+
 ## ssh key
 ~~~sh
 ghwo61351@c5r1s2 ~ % ls /Volumes 
@@ -488,3 +536,46 @@ To github.com:ghwo6/E1-1.git
  + eda1300...a4xxb8 main -> main (forced update)
 ~~~
 ![깃허브 vs code 연결 증명](./git_vscode_connect.png)
+
+
+
+## 트러블 슈팅
+## 🚨 트러블슈팅 (Troubleshooting) 기록
+
+### Case 1: 중복된 컨테이너 이름 충돌 (Name Conflict)
+도커 컨테이너를 백그라운드로 실행하는 과정에서 이전에 사용했던 이름과 충돌하는 문제가 발생했습니다.
+
+*   **문제 (Problem):** `docker run` 명령어로 컨테이너를 띄우려 했으나, `Conflict. The container name is already in use` 에러가 발생하며 실행이 거부되었습니다.
+*   **원인 가설 (Hypothesis):** 이전에 `docker stop`으로 컨테이너의 작동을 멈추기만 했을 뿐, 시스템에서 완전히 폐기(`rm`)하지 않아 이름이 계속 점유된 상태일 것으로 추정했습니다.
+*   **확인 (Verification):** `docker ps -a` 명령어를 입력하여 확인한 결과, 실제로 기존 컨테이너들이 `Exited` 및 `Created` 상태로 남아있는 것을 발견했습니다.
+*   **해결 (Solution):** `docker rm` 명령어로 잔여 컨테이너를 깨끗하게 지워 포트와 이름을 반납시킨 후, 문제를 해결했습니다.
+
+```sh
+# 에러 발생 상황
+$ docker run -d -p 8081:80 --name web-server-2 my-web:1.0
+docker: Error response from daemon: Conflict. The container name "/web-server-2" is already in use...
+
+# 원인 확인 및 잔여 컨테이너 삭제 
+$ docker ps -a
+$ docker rm web-server-2
+$ docker rm web-server-3
+```
+---
+
+### Case 2: 옵션 누락으로 인한 이미지 인식 오류 (Image Not Found)
+이름 충돌 문제를 해결한 후 다시 컨테이너를 실행하는 과정에서 이미지를 찾지 못하는 오류가 발생했습니다.
+
+*   **문제 (Problem):** `docker run` 실행 중 `pull access denied for my-web-server` 에러가 발생하며 로컬 이미지를 찾지 못했습니다.
+*   **원인 가설 (Hypothesis):** 로컬에 `my-web:1.0` 이미지가 정상적으로 빌드되어 있음에도 에러가 뜬 것으로 보아, 명령어 문법(오타) 문제로 도커 엔진이 컨테이너 이름을 이미지 이름으로 착각했을 것으로 추정했습니다.
+*   **확인 (Verification):** 실행했던 명령어(`docker run -d -p 8081:80 my-web-server my-web:1.0`)를 점검해 보니, 컨테이너 이름을 지정하는 `--name` 옵션이 누락된 것을 확인했습니다.
+*   **해결 (Solution):** `--name my-web-server`로 옵션을 정확히 수정하여 이 동작을 다시 수행한 결과, 정상적으로 해시값을 반환하며 실행에 성공했습니다.
+
+```sh
+# 에러 발생 상황 (--name 옵션 누락)
+$ docker run -d -p 8081:80 my-web-server my-web:1.0
+docker: Error response from daemon: pull access denied for my-web-server...
+
+# 옵션 수정 후 정상 실행
+$ docker run -d -p 8081:80 --name my-web-server my-web:1.0
+c2d81cf3e13b827db0d0f8956488fe616fd3de61101992a87d5cf575db57c916
+```
