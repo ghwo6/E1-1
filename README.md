@@ -1,5 +1,18 @@
-터미널 조작 로그
-‘’’sh
+# 수행 항목 체크리스트
+- [x] 터미널 기본 조작 연습
+- [x] 파일 권한 변경 실습
+- [x] Docker 기본 명령어
+- [x] 간단한 웹서버 컨테이너 띄우기
+- [x] ubuntu 컨테이너 내부 진입 실습
+- [x] Dockerfile 커스텀 이미지 빌드
+- [x] 포트 매핑 접속 검증
+- [x] 바인드 마운트 반영 확인
+- [x] Docker 볼륨 영속성 검증
+- [x] Git 설정 + GitHub 연동
+
+
+## 터미널 조작 로그 ( 터미널 기본 조작 연습 + 파일 권한 변경 실습)
+~~~sh
 Last login: Tue Jul 28 11:44:35 on ttys000
 ghwo61351@c4r1s2 ~ % mkdir ~/ghwo6
 ghwo61351@c4r1s2 ~ % cd ./ghwo6 
@@ -8,7 +21,6 @@ Initialized empty Git repository in /Users/ghwo61351/ghwo6/.git/
 ghwo61351@c4r1s2 ghwo6 % git config --global user.name "Hojae"
 ghwo61351@c4r1s2 ghwo6 % git config --global user.email "ghwo6@naver.com"
 ghwo61351@c4r1s2 ghwo6 % git config --global init.defaultBranch main
-
 ghwo61351@c4r1s2 ghwo6 % git config --list
 credential.helper=osxkeychain
 init.defaultbranch=main
@@ -22,7 +34,6 @@ core.logallrefupdates=true
 core.ignorecase=true
 core.precomposeunicode=true
 ghwo61351@c4r1s2 ghwo6 % 
-
 ghwo61351@c4r1s2 ghwo6 % ls 
 ghwo61351@c4r1s2 ghwo6 %                                           
 ghwo61351@c4r1s2 ghwo6 % cd ~ 
@@ -53,10 +64,64 @@ ghwo61351@c4r1s2 E01-01 % chmod 755 practice_dir/test.txt
 ghwo61351@c4r1s2 E01-01 % ls -l practice_dir/test.txt 
 -rwxr-xr-x  1 ghwo61351  ghwo61351  0  7 28 12:42 practice_dir/test.txt
 ghwo61351@c4r1s2 E01-01 % 
-‘’’
+~~~
 
-도커
-‘’’sh
+~~~sh
+ghwo61351@c4r1s2 E01-01 % mkdir practice_dir
+ghwo61351@c6r2s2 practice_dir % mkdir folder
+ghwo61351@c6r2s2 practice_dir % touch file.txt
+ghwo61351@c6r2s2 practice_dir % ls
+file.txt        folder          rename.txt      test.txt
+ghwo61351@c6r2s2 practice_dir % ls -al
+total 0
+drwxr-xr-x  6 ghwo61351  ghwo61351  192 Jul 31 16:34 .
+drwxr-xr-x  3 ghwo61351  ghwo61351   96 Jul 31 16:29 ..
+-rw-r--r--  1 ghwo61351  ghwo61351    0 Jul 31 16:34 file.txt
+drwxr-xr-x  2 ghwo61351  ghwo61351   64 Jul 31 16:34 folder
+-rw-r--r--  1 ghwo61351  ghwo61351    0 Jul 31 16:12 rename.txt
+-rwxr-xr-x  1 ghwo61351  ghwo61351    0 Jul 31 16:12 test.txt
+ghwo61351@c6r2s2 practice_dir % cat file.txt 
+ghwo61351@c6r2s2 practice_dir % "file" >> ./file.txt 
+Usage: file [-bcCdEhikLlNnprsSvzZ0] [--extension] [--mime-encoding]
+            [--mime-type] [-e <testname>] [-F <separator>]  [-f <namefile>]
+            [-m <magicfiles>] [-M magicfiles] [-P <parameter=value>] [--exclude-quiet]
+            <file> ...
+       file -C [-m <magicfiles>]
+       file [--help]
+Try `file --help' for more information.
+ghwo61351@c6r2s2 practice_dir % 1234 >> ./file.txt 
+zsh: command not found: 1234
+ghwo61351@c6r2s2 practice_dir % echo "file" >> file.txt 
+ghwo61351@c6r2s2 practice_dir % cat file.txt 
+file
+ghwo61351@c6r2s2 practice_dir % cd ./folder 
+ghwo61351@c6r2s2 folder % cd ..
+ghwo61351@c6r2s2 practice_dir % ls -al
+total 8
+drwxr-xr-x  6 ghwo61351  ghwo61351  192 Jul 31 16:34 .
+drwxr-xr-x  3 ghwo61351  ghwo61351   96 Jul 31 16:29 ..
+-rw-r--r--  1 ghwo61351  ghwo61351    5 Jul 31 16:37 file.txt
+drwxr-xr-x  2 ghwo61351  ghwo61351   64 Jul 31 16:34 folder
+-rw-r--r--  1 ghwo61351  ghwo61351    0 Jul 31 16:12 rename.txt
+-rwxr-xr-x  1 ghwo61351  ghwo61351    0 Jul 31 16:12 test.txt
+ghwo61351@c6r2s2 practice_dir % chmod 000 ./folder ./file.txt  
+ghwo61351@c6r2s2 practice_dir % cd ./folder 
+cd: permission denied: ./folder
+ghwo61351@c6r2s2 practice_dir % cat file.txt 
+cat: file.txt: Permission denied
+ghwo61351@c6r2s2 practice_dir % chmod 777 ./folder ./file.txt 
+ghwo61351@c6r2s2 practice_dir % cd ./folder                   
+ghwo61351@c6r2s2 folder % cd ..
+ghwo61351@c6r2s2 practice_dir % cat file.txt                  
+file
+ghwo61351@c6r2s2 practice_dir % 
+~~~
+
+
+
+
+## Docker 운영/검증 로그
+~~~xsh
 ghwo61351@c4r1s1 E1-1 % docker --version
 Docker version 29.4.0, build 9d7ad9f
 ghwo61351@c4r1s1 E1-1 % docker info
@@ -215,7 +280,6 @@ root@474b1b2da4c2:/# echo $SHELL
 root@474b1b2da4c2:/# exit
 exit
 ghwo61351@c4r1s1 E1-1 % 
-
 ghwo61351@c4r1s1 E1-1 % mkdir app   
 ghwo61351@c4r1s1 E1-1 % echo "<h1>Hello Codyssey! Built by Hojae</h1>" > app/index.html
 ghwo61351@c4r1s1 E1-1 % mkdir docker
@@ -301,102 +365,13 @@ d7fc18efe4af   my-custom-server   0.00%     6.16MiB / 15.67GiB   0.04%     1.13k
 ghwo61351@c4r1s1 docker % curl localhost:8080
 <h1>Hello Codyssey! Built by Hojae</h1>
 ghwo61351@c4r1s1 docker % 
-‘’’
+~~~
+
+![도커 웹 띄움](./docker_port_connect_on_localhost.png)
 
 
-
-ssh key
-‘’’sh
-ghwo61351@c5r1s2 ~ % ls /Volumes 
-Macintosh HD
-ghwo61351@c5r1s2 ~ % Disk Utility
-zsh: command not found: Disk
-ghwo61351@c5r1s2 ~ % ls /Volumes 
-ho_usb		Macintosh HD
-ghwo61351@c5r1s2 ~ % mkdir /Volumes/ho_usb/git-ssh
-mkdir: /Volumes/ho_usb/git-ssh: File exists
-ghwo61351@c5r1s2 ~ % ssh-keygen -t ed25519 -C "ghwo6@naver.com" -f /Volumes/ho_usb/git-ssh/id_ed25519
-Generating public/private ed25519 key pair.
-Enter passphrase for "/Volumes/ho_usb/git-ssh/id_ed25519" (empty for no passphrase): 
-Enter same passphrase again: 
-Your identification has been saved in /Volumes/ho_usb/git-ssh/id_ed25519
-Your public key has been saved in /Volumes/ho_usb/git-ssh/id_ed25519.pub
-The key fingerprint is:
-SHA256:
-The key's randomart image is:
-+--[ED25519 256]--+
-|                 |
-|       .       . |
-|      . o .   . .|
-|     . + = . .  o|
-|    o o S = .  .o|
-| . o . + *     ..|
-|  o =o+.% =     E|
-|   o.+=X+%       |
-|    .oOB+oo      |
-+----[SHA256]-----+
-ghwo61351@c5r1s2 ~ % cat /Volumes/ho_usb/git-ssh/id_ed25519.pub | pbcopy
-ghwo61351@c5r1s2 ~ % 
-‘’’
-
-‘’’sh
-ghwo61351@c6r2s2 practice_dir % mkdir folder
-ghwo61351@c6r2s2 practice_dir % touch file.txt
-ghwo61351@c6r2s2 practice_dir % ls
-file.txt        folder          rename.txt      test.txt
-ghwo61351@c6r2s2 practice_dir % ls -al
-total 0
-drwxr-xr-x  6 ghwo61351  ghwo61351  192 Jul 31 16:34 .
-drwxr-xr-x  3 ghwo61351  ghwo61351   96 Jul 31 16:29 ..
--rw-r--r--  1 ghwo61351  ghwo61351    0 Jul 31 16:34 file.txt
-drwxr-xr-x  2 ghwo61351  ghwo61351   64 Jul 31 16:34 folder
--rw-r--r--  1 ghwo61351  ghwo61351    0 Jul 31 16:12 rename.txt
--rwxr-xr-x  1 ghwo61351  ghwo61351    0 Jul 31 16:12 test.txt
-ghwo61351@c6r2s2 practice_dir % cat file.txt 
-ghwo61351@c6r2s2 practice_dir % "file" >> ./file.txt 
-Usage: file [-bcCdEhikLlNnprsSvzZ0] [--extension] [--mime-encoding]
-            [--mime-type] [-e <testname>] [-F <separator>]  [-f <namefile>]
-            [-m <magicfiles>] [-M magicfiles] [-P <parameter=value>] [--exclude-quiet]
-            <file> ...
-       file -C [-m <magicfiles>]
-       file [--help]
-Try `file --help' for more information.
-ghwo61351@c6r2s2 practice_dir % 1234 >> ./file.txt 
-zsh: command not found: 1234
-ghwo61351@c6r2s2 practice_dir % echo "file" >> file.txt 
-ghwo61351@c6r2s2 practice_dir % cat file.txt 
-file
-ghwo61351@c6r2s2 practice_dir % cd ./folder 
-ghwo61351@c6r2s2 folder % cd ..
-ghwo61351@c6r2s2 practice_dir % ls -al
-total 8
-drwxr-xr-x  6 ghwo61351  ghwo61351  192 Jul 31 16:34 .
-drwxr-xr-x  3 ghwo61351  ghwo61351   96 Jul 31 16:29 ..
--rw-r--r--  1 ghwo61351  ghwo61351    5 Jul 31 16:37 file.txt
-drwxr-xr-x  2 ghwo61351  ghwo61351   64 Jul 31 16:34 folder
--rw-r--r--  1 ghwo61351  ghwo61351    0 Jul 31 16:12 rename.txt
--rwxr-xr-x  1 ghwo61351  ghwo61351    0 Jul 31 16:12 test.txt
-ghwo61351@c6r2s2 practice_dir % chmod 000 ./folder ./file.txt  
-ghwo61351@c6r2s2 practice_dir % cd ./folder 
-cd: permission denied: ./folder
-ghwo61351@c6r2s2 practice_dir % cat file.txt 
-cat: file.txt: Permission denied
-ghwo61351@c6r2s2 practice_dir % chmod 777 ./folder ./file.txt 
-ghwo61351@c6r2s2 practice_dir % cd ./folder                   
-ghwo61351@c6r2s2 folder % cd ..
-ghwo61351@c6r2s2 practice_dir % cat file.txt                  
-file
-ghwo61351@c6r2s2 practice_dir % 
-
-
-
-
-‘’’
-
-
-볼륨 영속성 확인
-
-‘’’sh
+## 볼륨 영속성 확인
+~~~sh
 ghwo61351@c6r2s2 E1-1 % docker volume --help
 Usage:  docker volume COMMAND
 
@@ -461,11 +436,47 @@ ghwo61351@c6r2s2 E1-1 % docker volume inspect my-vol
     }
 ]
 ghwo61351@c6r2s2 E1-1 % 
+~~~
+
+![볼륨 영속성 확인 사진1](./Docker_Volume_Persistence_1.png)
+![볼륨 영속성 확인 사진2](./Docker_Volume_Persistence_2.png)
+
+## ssh key
+~~~sh
+ghwo61351@c5r1s2 ~ % ls /Volumes 
+Macintosh HD
+ghwo61351@c5r1s2 ~ % Disk Utility
+zsh: command not found: Disk
+ghwo61351@c5r1s2 ~ % ls /Volumes 
+ho_usb		Macintosh HD
+ghwo61351@c5r1s2 ~ % mkdir /Volumes/ho_usb/git-ssh
+mkdir: /Volumes/ho_usb/git-ssh: File exists
+ghwo61351@c5r1s2 ~ % ssh-keygen -t ed25519 -C "ghwo6@naver.com" -f /Volumes/ho_usb/git-ssh/id_ed25519
+Generating public/private ed25519 key pair.
+Enter passphrase for "/Volumes/ho_usb/git-ssh/id_ed25519" (empty for no passphrase): 
+Enter same passphrase again: 
+Your identification has been saved in /Volumes/ho_usb/git-ssh/id_ed25519
+Your public key has been saved in /Volumes/ho_usb/git-ssh/id_ed25519.pub
+The key fingerprint is:
+SHA256:
+The key's randomart image is:
++--[ED25519 256]--+
+|                 |
+|       .       . |
+|      . o .   . .|
+|     . + = . .  o|
+|    o o S = .  .o|
+| . o . + *     ..|
+|  o =o+.% =     E|
+|   o.+=X+%       |
+|    .oOB+oo      |
++----[SHA256]-----+
+ghwo61351@c5r1s2 ~ % cat /Volumes/ho_usb/git-ssh/id_ed25519.pub | pbcopy
+ghwo61351@c5r1s2 ~ % 
 ‘’’
 
-
-git-ssh 설정함
-'''sh
+## git-ssh 설정함
+~~~sh
 ghwo61351@c6r2s2 E1-1 % git push origin main --force
 The authenticity of host 'github.com (20.200.245.247)' can't be established.
 ED25519 key fingerprint is SHA256:+xxxxxx/zxxxxxx.
@@ -475,4 +486,5 @@ Warning: Permanently added 'github.com' (ED25519) to the list of known hosts.
 Total 0 (delta 0), reused 0 (delta 0), pack-reused 0 (from 0)
 To github.com:ghwo6/E1-1.git
  + eda1300...a4xxb8 main -> main (forced update)
- '''
+~~~
+![깃허브 vs code 연결 증명](./git_vscode_connect.png)
