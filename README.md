@@ -302,6 +302,7 @@ app
 ghwo61351@c4r1s1 E1-1 % cd docker 
 ghwo61351@c4r1s1 docker % nano Dockerfile
 ~~~~
+### 목적 : 사이트 접속시 app/index.html을 화면에 출력한다.
 ~~~DOCKERFILE
 FROM nginx:alpine
 COPY app/index.html /usr/share/nginx/html/index.html
